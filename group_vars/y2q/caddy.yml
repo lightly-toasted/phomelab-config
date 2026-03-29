@@ -8,15 +8,6 @@ caddy_caddyfile: |
     auto_https off
   }
 
-
-  # Cloudflare Tunnel
-  http://gist.700457.xyz {
-    # Opengist
-    reverse_proxy http://localhost:{{ opengist_port }}
-  }
-
-
-  # Tailscale
   http://glances.ts.700457.xyz {
     # Glances
     reverse_proxy http://localhost:61208
