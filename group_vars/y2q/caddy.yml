@@ -1,18 +1,5 @@
 ---
-redis_enabled: true
-glances_enabled: true
-opengist_enabled: true
-paperless_enabled: true
-restic_rest_server_enabled: true
-backups_enabled: true
-navidrome_enabled: true
 caddy_enabled: true
-cloudflared_enabled: true
-openwebui_enabled: true
-trilium_enabled: true
-memos_enabled: true
-tailscaled_enabled: true
-
 
 caddy_caddyfile: |
   {
