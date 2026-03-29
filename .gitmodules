@@ -1,0 +1,3 @@
+[submodule "phomelab"]
+	path = phomelab
+	url = git@github.com:lightly-toasted/phomelab
