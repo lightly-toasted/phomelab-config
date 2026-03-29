@@ -1,0 +1,21 @@
+---
+forgejo_enabled: true
+forgejo_config: |
+  [server]
+  DOMAIN = git.700457.xyz
+  SSH_ROOT_PATH = /var/lib/forgejo/.ssh
+  LANDING_PAGE = explore
+
+  [database]
+  DB_TYPE = sqlite3
+  PATH = /var/lib/forgejo/data/forgejo.db
+
+  [service]
+  DISABLE_REGISTRATION = true
+
+  [actions]
+  ENABLED = true
+  DEFAULT_ACTIONS_URL = github
+
+  [security]
+  INSTALL_LOCK = true
