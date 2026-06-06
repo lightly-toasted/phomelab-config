@@ -1,44 +1,59 @@
 ---
 caddy_enabled: true
+caddy_package: github:lightly-toasted/phomelab-config#caddy # caddy with cloudflare plugin
 
 caddy_caddyfile: |
   {
     http_port {{ caddy_http_port }}
     https_port {{ caddy_https_port }}
-    auto_https off
+    acme_dns cloudflare {env.CF_API_TOKEN}
   }
 
-  http://glances.ts.700457.xyz {
+
+
+  glances.ts.700457.xyz {
     # Glances
     reverse_proxy http://localhost:61208
   }
 
-  http://{{ paperless_ngx_hostname }} {
+  {{ paperless_ngx_hostname }} {
     # Paperless-ngx
     reverse_proxy http://localhost:{{ paperless_ngx_port }}
   }
 
-  http://restic.ts.700457.xyz {
+  restic.ts.700457.xyz {
     # restic rest-server
     reverse_proxy http://localhost:{{ restic_rest_server_port }}
   }
 
-  http://music.ts.700457.xyz {
+  music.ts.700457.xyz {
     # Navidrome
     reverse_proxy http://localhost:{{ navidrome_port }}
   }
 
-  http://chat.ts.700457.xyz {
+  chat.ts.700457.xyz {
     # Open WebUI
     reverse_proxy http://localhost:{{ openwebui_port }}
   }
 
-  http://notes.ts.700457.xyz {
+  notes.ts.700457.xyz {
     # Trilium Notes
     reverse_proxy http://localhost:{{ trilium_port }}
   }
 
-  http://memos.ts.700457.xyz {
+  memos.ts.700457.xyz {
     # Trilium Notes
     reverse_proxy http://localhost:{{ memos_port }}
   }
+
+caddy_env:
+  CF_API_TOKEN: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          35366664353334666466393234383564373839626662366439393338316435633337326335343537
+          3163396339373537633538363038333139666538333132380a646639616234373763336432316362
+          33643630303832333036313961303634346130643435353662643939383131356138343636363135
+          3230626231643239370a333932376235393231396634333837656262623962643237303332626138
+          32333934323632653863303261366463616261363361663261363063643535353965653963653536
+          37653530363533663333336134316433316632323337373732326436663363353531393735376230
+          653735663931323362393966316339636132
+  
