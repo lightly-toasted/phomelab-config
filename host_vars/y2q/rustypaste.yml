@@ -1,0 +1,378 @@
+---
+rustypaste_enabled: true
+rustypaste_token: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          62373135653530326464376665366165656239616565663662336436363634626339636337366163
+          3863303761643066363762303434393337346566656563340a363730393763396464623830373165
+          62393762303136373964363937323639373261643336653539643366316265353966306635346639
+          3639656262376661360a626238316566386434323037323533323533303538313935313663363764
+          31316335393161336530336631336234646536363863646537363665616563386536316231376665
+          33366633303861366366396166643632616236633036643466336365393564393461653535633438
+          366261333030386630613363333435366434
+rustypaste_config: |
+  [config]
+  refresh_rate = "1s"
+
+  [server]
+  address = "0.0.0.0:3010"
+  url = "https://bin.700457.xyz"
+  #workers=4
+  max_content_length = "4GB"
+  upload_path = "./upload"
+  timeout = "30s"
+  expose_version = false
+  expose_list = false
+  auth_tokens = ["{{ rustypaste_token }}"]
+  delete_tokens = ["{{ rustypaste_token }}"]
+  handle_spaces = "replace" # or "encode"
+
+  [landing_page]
+  text = """
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <title>rustypaste</title>
+      <meta charset="utf-8" />
+    </head>
+    <body>
+      <pre>
+  ┬─┐┬ ┬┌─┐┌┬┐┬ ┬┌─┐┌─┐┌─┐┌┬┐┌─┐
+  ├┬┘│ │└─┐ │ └┬┘├─┘├─┤└─┐ │ ├┤
+  ┴└─└─┘└─┘ ┴  ┴ ┴  ┴ ┴└─┘ ┴ └─┘
+
+  Submit files via HTTP POST here:
+  curl -F 'file=@example.txt' -H 'Authorization: <your_token>' https://bin.700457.xyz
+  This will return the URL of the uploaded file.
+
+  Check out the GitHub repository at https://github.com/orhun/rustypaste
+  Command line tool is available  at https://github.com/orhun/rustypaste-cli
+      </pre>
+
+      <hr />
+
+      <label>Authorization Token:</label>
+      <input type="text" id="globalAuthToken" placeholder="<auth_token>" />
+
+      <hr />
+
+      <h3>Shorten URL</h3>
+      <form id="formUrl" onsubmit="return uploadUrl(event)">
+        <input type="url" name="url" placeholder="https://example.com/some/long/url" required />
+        <label>Expire:
+          <select name="expire">
+            <option value="">Default</option>
+            <option value="10min">10 min</option>
+            <option value="1h">1 hour</option>
+            <option value="24h">24 hours</option>
+            <option value="7d">7 days</option>
+            <option value="30d">30 days</option>
+            <option value="never">Never</option>
+          </select>
+        </label>
+        <button type="submit">Shorten</button>
+      </form>
+      <div id="resultUrl"></div>
+
+      <hr />
+
+      <h3>Paste File from Remote URL</h3>
+      <form id="formRemote" onsubmit="return uploadRemote(event)">
+        <input type="url" name="remote" placeholder="https://example.com/file.png" required />
+        <label>Expire:
+          <select name="expire">
+            <option value="">Default</option>
+            <option value="10min">10 min</option>
+            <option value="1h">1 hour</option>
+            <option value="24h">24 hours</option>
+            <option value="7d">7 days</option>
+            <option value="30d">30 days</option>
+            <option value="never">Never</option>
+          </select>
+        </label>
+        <label>Filename: <input type="text" name="filename" placeholder="Override (optional)" /></label>
+        <button type="submit">Fetch &amp; Upload</button>
+      </form>
+      <div id="resultRemote"></div>
+
+      <hr />
+
+      <h3>Upload File</h3>
+      <form id="formFile" onsubmit="return uploadFile(event)">
+        <input type="file" name="file" required />
+        <label>Expire:
+          <select name="expire">
+            <option value="">Default</option>
+            <option value="10min">10 min</option>
+            <option value="1h">1 hour</option>
+            <option value="24h">24 hours</option>
+            <option value="7d">7 days</option>
+            <option value="30d">30 days</option>
+            <option value="never">Never</option>
+          </select>
+        </label>
+        <label>Filename: <input type="text" name="filename" placeholder="Override (optional)" /></label>
+        <button type="submit">Upload</button>
+      </form>
+      <div id="resultFile"></div>
+
+      <hr />
+
+      <h3>Upload One-Shot File</h3>
+      <p>(Can only be viewed once before being deleted.)</p>
+      <form id="formOneshot" onsubmit="return uploadOneshot(event)">
+        <input type="file" name="oneshot" required />
+        <label>Expire:
+          <select name="expire">
+            <option value="">Default</option>
+            <option value="10min">10 min</option>
+            <option value="1h">1 hour</option>
+            <option value="24h">24 hours</option>
+            <option value="7d">7 days</option>
+            <option value="30d">30 days</option>
+            <option value="never">Never</option>
+          </select>
+        </label>
+        <button type="submit">Upload One-Shot</button>
+      </form>
+      <div id="resultOneshot"></div>
+
+      <hr />
+
+      <h3>One-Shot URL</h3>
+      <p>(Creates a one-time viewable URL redirect.)</p>
+      <form id="formOneshotUrl" onsubmit="return uploadOneshotUrl(event)">
+        <input type="url" name="oneshot_url" placeholder="https://example.com" required />
+        <label>Expire:
+          <select name="expire">
+            <option value="">Default</option>
+            <option value="10min">10 min</option>
+            <option value="1h">1 hour</option>
+            <option value="24h">24 hours</option>
+            <option value="7d">7 days</option>
+            <option value="30d">30 days</option>
+            <option value="never">Never</option>
+          </select>
+        </label>
+        <button type="submit">Share One-Shot URL</button>
+      </form>
+      <div id="resultOneshotUrl"></div>
+
+      <hr />
+
+      <h3>Delete File from Server</h3>
+      <p>(Requires a delete token configured on the server.)</p>
+      <form id="formDelete" onsubmit="return deleteFile(event)">
+        <input type="text" name="delete_path" placeholder="/file.txt" required />
+        <button type="submit">Delete</button>
+      </form>
+      <div id="resultDelete"></div>
+
+      <script>
+        // ---------- Helpers ----------
+
+        function getAuthToken() {
+          return document.getElementById("globalAuthToken").value.trim();
+        }
+
+        function authRequired() {
+          const token = getAuthToken();
+          if (!token) {
+            alert("Please enter an Authorization Token first.");
+            return false;
+          }
+          return true;
+        }
+
+        function getHeaders(form) {
+          const headers = {};
+          const token = getAuthToken();
+          if (token) {
+            headers["Authorization"] = token;
+          }
+          const expireSelect = form.querySelector("select[name='expire']");
+          if (expireSelect && expireSelect.value) {
+            headers["expire"] = expireSelect.value;
+          }
+          const filenameInput = form.querySelector("input[name='filename']");
+          if (filenameInput && filenameInput.value.trim()) {
+            headers["filename"] = filenameInput.value.trim();
+          }
+          return headers;
+        }
+
+        function showResult(id, text) {
+          const el = document.getElementById(id);
+          el.textContent = text;
+        }
+
+        function showResultLink(id, url) {
+          const el = document.getElementById(id);
+          el.innerHTML = '<a href="' + url.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + '" target="_blank">' + url.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</a>";
+        }
+
+        // ---------- Upload URL (shorten) ----------
+
+        function uploadUrl(event) {
+          event.preventDefault();
+          if (!authRequired()) return false;
+          const form = event.target;
+          const formData = new FormData();
+          formData.append("url", form.querySelector("input[name='url']").value);
+          const headers = getHeaders(form);
+          fetch("/", { method: "POST", headers: headers, body: formData })
+            .then(handleResponse("resultUrl"))
+            .catch(handleError("resultUrl"));
+          return false;
+        }
+
+        // ---------- Upload Remote ----------
+
+        function uploadRemote(event) {
+          event.preventDefault();
+          if (!authRequired()) return false;
+          const form = event.target;
+          const formData = new FormData();
+          formData.append("remote", form.querySelector("input[name='remote']").value);
+          const headers = getHeaders(form);
+          fetch("/", { method: "POST", headers: headers, body: formData })
+            .then(handleResponse("resultRemote"))
+            .catch(handleError("resultRemote"));
+          return false;
+        }
+
+        // ---------- Upload File ----------
+
+        function uploadFile(event) {
+          event.preventDefault();
+          if (!authRequired()) return false;
+          const form = event.target;
+          const fileInput = form.querySelector("input[type='file']");
+          if (!fileInput.files || !fileInput.files[0]) {
+            alert("Please select a file.");
+            return false;
+          }
+          const formData = new FormData();
+          formData.append("file", fileInput.files[0]);
+          const headers = getHeaders(form);
+          fetch("/", { method: "POST", headers: headers, body: formData })
+            .then(handleResponse("resultFile"))
+            .catch(handleError("resultFile"));
+          return false;
+        }
+
+        // ---------- Upload One-Shot File ----------
+
+        function uploadOneshot(event) {
+          event.preventDefault();
+          if (!authRequired()) return false;
+          const form = event.target;
+          const fileInput = form.querySelector("input[type='file']");
+          if (!fileInput.files || !fileInput.files[0]) {
+            alert("Please select a file.");
+            return false;
+          }
+          const formData = new FormData();
+          formData.append("oneshot", fileInput.files[0]);
+          const headers = getHeaders(form);
+          fetch("/", { method: "POST", headers: headers, body: formData })
+            .then(handleResponse("resultOneshot"))
+            .catch(handleError("resultOneshot"));
+          return false;
+        }
+
+        // ---------- Upload One-Shot URL ----------
+
+        function uploadOneshotUrl(event) {
+          event.preventDefault();
+          if (!authRequired()) return false;
+          const form = event.target;
+          const formData = new FormData();
+          formData.append("oneshot_url", form.querySelector("input[name='oneshot_url']").value);
+          const headers = getHeaders(form);
+          fetch("/", { method: "POST", headers: headers, body: formData })
+            .then(handleResponse("resultOneshotUrl"))
+            .catch(handleError("resultOneshotUrl"));
+          return false;
+        }
+
+        // ---------- Delete File ----------
+
+        function deleteFile(event) {
+          event.preventDefault();
+          if (!authRequired()) return false;
+          const path = event.target.querySelector("input[name='delete_path']").value.trim();
+          const token = getAuthToken();
+          const headers = { Authorization: token };
+          fetch("/" + path.replace(/^\\//, ""), { method: "DELETE", headers: headers })
+            .then(function (response) {
+              if (!response.ok) {
+                return response.text().then(function (text) {
+                  throw new Error(response.status + " " + response.statusText + (text ? ": " + text : ""));
+                });
+              }
+              return response.text().then(function (text) {
+                showResult("resultDelete", text || "File deleted successfully.");
+              });
+            })
+            .catch(function (error) {
+              showResult("resultDelete", "Error: " + error.message);
+            });
+          return false;
+        }
+
+        // ---------- Generic handlers ----------
+
+        function handleResponse(resultId) {
+          return function (response) {
+            if (!response.ok) {
+              return response.text().then(function (text) {
+                showResult(resultId, "Error " + response.status + ": " + text);
+              });
+            }
+            return response.text().then(function (url) {
+              if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/")) {
+                showResultLink(resultId, url);
+              } else {
+                showResult(resultId, url || "Upload successful!");
+              }
+            });
+          };
+        }
+
+        function handleError(resultId) {
+          return function (error) {
+            showResult(resultId, "Error: " + error.message);
+          };
+        }
+      </script>
+    </body>
+  </html>
+  """
+  content_type = "text/html; charset=utf-8"
+
+  [paste]
+  random_url = { type = "petname", words = 2, separator = "-" }
+  default_extension = "txt"
+  mime_override = [
+    { mime = "image/jpeg", regex = "^.*\\.jpg$" },
+    { mime = "image/png", regex = "^.*\\.png$" },
+    { mime = "image/svg+xml", regex = "^.*\\.svg$" },
+    { mime = "video/webm", regex = "^.*\\.webm$" },
+    { mime = "video/x-matroska", regex = "^.*\\.mkv$" },
+    { mime = "application/octet-stream", regex = "^.*\\.bin$" },
+    { mime = "text/plain", regex = "^.*\\.(log|txt|diff|sh|rs|toml)$" },
+  ]
+  mime_blacklist = [
+    "application/x-dosexec",
+    "application/java-archive",
+    "application/java-vm",
+    "audio/",
+  ]
+  # Additional MIME types to render as text/plain when serving files.
+  text_mime_overrides = [
+    "application/toml",
+    "application/yaml",
+    "application/x-yaml",
+  ]
+  duplicate_files = true
+  delete_expired_files = { enabled = true, interval = "1h" }

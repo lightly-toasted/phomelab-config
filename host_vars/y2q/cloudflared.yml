@@ -8,6 +8,8 @@ cloudflared_config:
       service: "http://localhost:{{ opengist_port }}"
     - hostname: git.700457.xyz
       service: "http://localhost:{{ forgejo_port }}"
+    - hostname: bin.700457.xyz
+      service: "http://localhost:3010"
     - service: http_status:404
     
 cloudflared_credentials: !vault |
