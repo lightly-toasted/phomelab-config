@@ -51,7 +51,7 @@ rustypaste_config: |
       <hr />
 
       <label>Authorization Token:</label>
-      <input type="text" id="globalAuthToken" placeholder="<auth_token>" />
+      <input type="password" id="globalAuthToken" placeholder="<auth_token>" />
 
       <hr />
 
