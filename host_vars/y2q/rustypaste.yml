@@ -21,7 +21,7 @@ rustypaste_config: |
   upload_path = "./upload"
   timeout = "30s"
   expose_version = false
-  expose_list = false
+  expose_list = true
   auth_tokens = ["{{ rustypaste_token }}"]
   delete_tokens = ["{{ rustypaste_token }}"]
   handle_spaces = "replace" # or "encode"
