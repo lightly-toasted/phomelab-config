@@ -42,8 +42,13 @@ caddy_caddyfile: |
   }
 
   memos.ts.700457.xyz {
-    # Trilium Notes
+    # Memos
     reverse_proxy http://localhost:{{ memos_port }}
+  }
+
+  c2fmzq.ts.700457.xyz {
+    # c2FmZQ
+    reverse_proxy http://{{ c2fmzq_address }}
   }
 
 caddy_env:
