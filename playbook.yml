@@ -1,0 +1,15 @@
+---
+- name: Import phomelab playbook
+  import_playbook: phomelab/playbooks/site.yml
+
+- name: My server configuration
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Ensure user toast exists
+      ansible.builtin.user:
+        name: toast
+        groups: sudo
+        append: true
+        create_home: true

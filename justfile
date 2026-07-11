@@ -1,4 +1,4 @@
-playbook := "phomelab/playbooks/site.yml"
+playbook := "playbook.yml"
 vault_file := "group_vars/all/vault.yml"
 
 default:
