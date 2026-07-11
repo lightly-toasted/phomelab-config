@@ -5,6 +5,7 @@ forgejo_config: |
   DOMAIN = git.700457.xyz
   SSH_ROOT_PATH = /var/lib/forgejo/.ssh
   LANDING_PAGE = explore
+  ROOT_URL = https://git.700457.xyz
 
   [database]
   DB_TYPE = sqlite3
