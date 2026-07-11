@@ -5,6 +5,7 @@ backups:
     paths:
       - "/var/lib/opengist"
       - "/var/lib/paperless"
+      - "/var/lib/vaultwarden"
     restic_repo: "s3:https://s3.us-east-005.backblazeb2.com/restic-backups-y2q/"
     restic_prune_opts:
       - "--keep-hourly 6"

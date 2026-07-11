@@ -51,6 +51,11 @@ caddy_caddyfile: |
     reverse_proxy http://{{ c2fmzq_address }}
   }
 
+  vault.ts.700457.xyz {
+    # Vaultwarden
+    reverse_proxy http://localhost:{{ vaultwarden_port }}
+  }
+
 caddy_env:
   CF_API_TOKEN: !vault |
           $ANSIBLE_VAULT;1.1;AES256

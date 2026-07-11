@@ -1,0 +1,6 @@
+---
+vaultwarden_enabled: true
+vaultwarden_env:
+  DOMAIN: "https://vault.ts.700457.xyz"
+  SIGNUPS_ALLOWED: "false"
+
