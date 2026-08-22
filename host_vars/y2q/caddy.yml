@@ -9,14 +9,12 @@ caddy_caddyfile: |
     acme_dns cloudflare {env.CF_API_TOKEN}
   }
 
-
-
   glances.ts.700457.xyz {
     # Glances
     reverse_proxy http://localhost:61208
   }
 
-  {{ paperless_ngx_hostname }} {
+  paperless.ts.700457.xyz {
     # Paperless-ngx
     reverse_proxy http://localhost:{{ paperless_ngx_port }}
   }
