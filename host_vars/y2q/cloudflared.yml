@@ -10,6 +10,8 @@ cloudflared_config:
       service: "http://localhost:{{ forgejo_port }}"
     - hostname: bin.700457.xyz
       service: "http://localhost:3010"
+    - hostname: c.700457.xyz
+      service: "http://localhost:3013"
     - service: http_status:404
     
 cloudflared_credentials: !vault |
