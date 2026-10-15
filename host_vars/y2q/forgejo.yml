@@ -3,6 +3,7 @@ forgejo_enabled: true
 forgejo_config: |
   [server]
   DOMAIN = git.700457.xyz
+  SSH_DOMAIN = y2q
   SSH_ROOT_PATH = /var/lib/forgejo/.ssh
   LANDING_PAGE = explore
   ROOT_URL = https://git.700457.xyz
