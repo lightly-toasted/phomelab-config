@@ -59,6 +59,11 @@ caddy_caddyfile: |
     reverse_proxy http://localhost:3013
   }
 
+  backrest.ts.700457.xyz {
+    # Backrest
+    reverse_proxy http://localhost:{{ backrest_port }}
+  }
+
 caddy_env:
   CF_API_TOKEN: !vault |
           $ANSIBLE_VAULT;1.1;AES256
