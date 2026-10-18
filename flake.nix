@@ -22,6 +22,7 @@
           buildInputs = with pkgs; [
             ansible
             just
+            parallel
           ];
 
           shellHook = ''

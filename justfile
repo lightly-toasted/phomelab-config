@@ -13,6 +13,9 @@ apply-tags TAGS:
 apply-limit LIMIT:
   ansible-playbook {{playbook}} --limit {{LIMIT}}
 
+apply-parallel +TAGS="":
+  bash scripts/apply-parallel.sh {{playbook}} {{TAGS}}
+
 check:
   ansible-playbook {{playbook}} --check --diff
 
