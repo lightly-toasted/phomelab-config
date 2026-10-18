@@ -4,8 +4,8 @@ caddy_package: github:lightly-toasted/phomelab-config#caddy # caddy with cloudfl
 
 caddy_caddyfile: |
   {
-    http_port {{ caddy_http_port }}
-    https_port {{ caddy_https_port }}
+    http_port 8080
+    https_port 8443
     acme_dns cloudflare {env.CF_API_TOKEN}
   }
 
