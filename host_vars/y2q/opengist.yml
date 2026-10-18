@@ -1,2 +1,4 @@
 ---
 opengist_enabled: true
+opengist_config:
+  ssh.git-enabled: disabled

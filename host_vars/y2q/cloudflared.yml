@@ -5,7 +5,7 @@ cloudflared_tunnel: 80415f05-21c3-4e0e-9b59-2e155b5f3cb3
 cloudflared_config:
   ingress:
     - hostname: gist.700457.xyz
-      service: "http://localhost:{{ opengist_port }}"
+      service: "http://localhost:3001"
     - hostname: git.700457.xyz
       service: "http://localhost:{{ forgejo_port }}"
     - hostname: bin.700457.xyz
