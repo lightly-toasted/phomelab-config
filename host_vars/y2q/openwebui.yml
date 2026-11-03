@@ -1,2 +1,23 @@
 ---
 openwebui_enabled: true
+openwebui_env:
+  DATA_DIR: "/var/lib/openwebui"
+
+  # Logging
+  ENABLE_AUDIT_STDOUT: "True"
+  ENABLE_AUDIT_LOGS_FILE: "False"
+
+  # Performance & RAM
+  # RAG_EMBEDDING_ENGINE = "none";
+  UVICORN_WORKERS: "1"
+  ENABLE_BASE_MODELS_CACHE: "True"
+  MODELS_CACHE_TTL: "300"
+  ENABLE_QUERIES_CACHE: "True"
+  RAG_SYSTEM_CONTEXT: "True"
+  RAG_EMBEDDING_ENGINE: "openai"
+  ENABLE_REALTIME_CHAT_SAVE: "False"
+  AUDIO_STT_ENGINE: "openai"
+  AUDIO_TTS_ENGINE: "openai"
+  CONTENT_EXTRACTION_ENGINE: "tiktoken"
+  ENABLE_AUTOCOMPLETE_GENERATION: "False"
+  DATABASE_ENABLE_SESSION_SHARING: "False"
