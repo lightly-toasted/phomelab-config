@@ -64,6 +64,11 @@ caddy_caddyfile: |
     reverse_proxy http://localhost:{{ backrest_port }}
   }
 
+  olivetin.ts.700457.xyz {
+    # OliveTin
+    reverse_proxy http://localhost:3015
+  }
+
 caddy_env:
   CF_API_TOKEN: !vault |
           $ANSIBLE_VAULT;1.1;AES256

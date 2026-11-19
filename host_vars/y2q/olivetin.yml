@@ -1,0 +1,21 @@
+---
+olivetin_enabled: true
+olivetin_config:
+  authRequireGuestsToLogin: true
+
+  authLocalUsers:
+    enabled: true
+    users:
+      - username: toast
+        password: $argon2id$v=19$m=65536,t=4,p=7$d4daMuUMDKh/vpKnd+psJA$IwRQqigbZYq5su9vDmMbdMXRPhkVdWr51Jh5PD30Od0
+
+  actions:
+    - title: "Ping Google"
+      icon: "🌐"
+      shell: ping -c 3 8.8.8.8
+      popupOnStart: execution-dialog-stdout-only
+
+    - title: "Check Disk Space"
+      icon: "💾"
+      shell: df -h
+      popupOnStart: execution-dialog-stdout-only
