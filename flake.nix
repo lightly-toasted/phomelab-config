@@ -13,22 +13,33 @@
         "aarch64-linux"
       ];
       
-      perSystem = { pkgs, system, ... }: {
-        packages = import ./pkgs {
-          inherit pkgs system;
-        };
+      perSystem = { pkgs, system, ... }:
+        let
+          packages = import ./pkgs {
+            inherit pkgs system;
+          };
 
-        devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            ansible
-            just
-            parallel
-          ];
+          ansible = pkgs.python3Packages.toPythonApplication (
+            pkgs.python3Packages.ansible-core.override {
+              extraPackages = _: [ packages.mitogen ];
+            }
+          );
+        in {
+          packages = packages;
 
-          shellHook = ''
-            ansible --version
-          '';
+          devShells.default = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              ansible
+              just
+              parallel
+            ];
+
+            shellHook = ''
+              export ANSIBLE_STRATEGY_PLUGINS="${packages.mitogen}/${pkgs.python3.sitePackages}/ansible_mitogen/plugins/strategy"
+              export ANSIBLE_STRATEGY=mitogen_linear
+              ansible --version
+            '';
+          };
         };
-      };
     };
 }
