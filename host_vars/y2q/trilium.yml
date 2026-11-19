@@ -1,2 +1,4 @@
 ---
 trilium_enabled: true
+trilium_env:
+  TRILIUM_GENERAL_NOBACKUP: true
