@@ -1,13 +1,25 @@
 ---
 olivetin_enabled: true
+
 olivetin_config:
   authRequireGuestsToLogin: true
+  
+  accessControlLists:
+    - name: "admins"
+      addToEveryAction: true
+      matchUsergroups:
+        - "admins"
+      permissions:
+        view: true
+        exec: true
+        logs: true
 
   authLocalUsers:
     enabled: true
     users:
       - username: toast
-        password: $argon2id$v=19$m=65536,t=4,p=7$d4daMuUMDKh/vpKnd+psJA$IwRQqigbZYq5su9vDmMbdMXRPhkVdWr51Jh5PD30Od0
+        usergroup: admins
+        password: $argon2id$v=19$m=65536,t=4,p=6$MS4p5TJWo7YvChCA8bvdQQ$9t/XwMouHZtHlPSLU/5fnv9dNmHBC5djUf0P6pBiOKs
 
   actions:
     - title: "Ping Google"
